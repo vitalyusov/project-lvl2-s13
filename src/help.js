@@ -1,15 +1,10 @@
+import program from 'commander';
+
 export default () => {
-  const helpText = `Config Compare.
-
-Usage:
-  conf-compare.js <first-config> <second-config>
-  conf-compare.js -h | --help
-  conf-compare.js --version
-
-Options:
-  -h --help     Show this screen.
-  --version     Show version.
-
-  `;
-  console.log(helpText);
+  program
+    .version('0.3.0')
+    .description('Compares two configuration files and shows a difference.')
+    .option('-f, --format [type]', 'Output format')
+    .arguments('<first_config> <second_config>')
+    .parse(process.argv);
 };
