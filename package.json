@@ -1,0 +1,35 @@
+{
+  "name": "config-compare-vu",
+  "version": "0.1.1",
+  "description": "Config compare",
+  "bin": {
+    "conf-compare": "dist/bin/conf-compare.js"
+  },
+  "main": "src/index.js",
+  "author": "Vitaly Usov",
+  "license": "MIT",
+  "scripts": {
+    "babel-node": "babel-node",
+    "flow": "flow",
+    "eslint": "eslint",
+    "conf-compare": "npm run babel-node -- src/bin/conf-compare.js",
+    "build": "NODE_ENV=production babel src --out-dir dist --source-maps inline",
+    "prepublish": "npm run build"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-core": "^6.21.0",
+    "babel-plugin-syntax-flow": "*",
+    "babel-plugin-transform-flow-strip-types": "*",
+    "babel-preset-env": "*",
+    "babel-preset-stage-0": "*",
+    "eslint": "*",
+    "eslint-config-airbnb": "*",
+    "eslint-config-airbnb-base": "^11.0.0",
+    "eslint-plugin-flowtype": "*",
+    "eslint-plugin-import": "*",
+    "flow-bin": "*",
+    "flow-typed": "*",
+    "babel-eslint": "*"
+  }
+}
