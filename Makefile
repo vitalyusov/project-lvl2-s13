@@ -2,7 +2,7 @@ install:
 	npm install
 
 run:
-	npm conf-compare
+	npm run gendiff
 
 lint:
 	npm run eslint -- src
