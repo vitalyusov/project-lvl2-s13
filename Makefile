@@ -5,7 +5,7 @@ run:
 	npm conf-compare
 
 lint:
-		npm run eslint -- src
+	npm run eslint -- src
 
 publish:
-		npm publish
+	npm publish
