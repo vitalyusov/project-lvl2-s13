@@ -5,7 +5,6 @@
   "bin": {
     "gendiff": "dist/bin/gendiff.js"
   },
-
   "author": "Vitaly Usov",
   "license": "MIT",
   "scripts": {
@@ -22,6 +21,7 @@
   "devDependencies": {
     "babel-cli": "*",
     "babel-core": "*",
+    "babel-eslint": "*",
     "babel-plugin-syntax-flow": "*",
     "babel-plugin-transform-flow-strip-types": "*",
     "babel-preset-env": "*",
@@ -33,6 +33,6 @@
     "eslint-plugin-import": "*",
     "flow-bin": "*",
     "flow-typed": "*",
-    "babel-eslint": "*"
+    "jest": "^18.1.0"
   }
 }
