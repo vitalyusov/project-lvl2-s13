@@ -12,7 +12,7 @@ const loadFiles = (before, after) => {
     const res = [];
 
     Object.keys(beforeObj).reduce((prev, current) => {
-      const diffItem = { result: '=', source: { current: beforeObj[current] } };
+      const diffItem = { source: { current: beforeObj[current] } };
       if (beforeObj[current] === afterObj[current]) {
         const sign = '=';
       }
