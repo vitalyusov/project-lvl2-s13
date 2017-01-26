@@ -1,24 +1,36 @@
-import diff from '../src/jsondiff';
+import fs from 'fs';
+import parse from '../src/jsonparse';
+import { diff, toString } from '../src/diff';
 
-it('should throw exception when files not exist', () => {
-  expect(() => diff('aaa', 'bbb')).toThrow();
-});
+const beforeFile = fs.readFileSync(`${__dirname}/file1.json`, 'utf-8');
+const afterFile = fs.readFileSync(`${__dirname}/file2.json`, 'utf-8');
 
-it('should load two json files and return difference', () => {
-  const differ = diff(`${__dirname}/file1.json`, `${__dirname}/file2.json`);
+const beforeObj = parse(beforeFile);
+const afterObj = parse(afterFile);
+const result = diff(beforeObj, afterObj);
 
-  const result = differ.diff();
-
-
+it('should return correct difference of objects', () => {
   const expected = [
-    { sign: '=', source: { host: 'hexlet.io' } },
+    { sign: ' ', source: { host: 'hexlet.io' } },
     { sign: '-', source: { timeout: 50 } },
     { sign: '-', source: { proxy: '123.234.53.22' } },
     { sign: '+', source: { timeout: 20 } },
     { sign: '+', source: { verbose: true } },
   ];
-  //console.log(result);
-  console.log(expected);
-  differ.toString(result);
-  expect(expected).toEqual(result);
+
+  expect(result).toEqual(expected);
+});
+
+it('should return correct string reprentation of diff', () => {
+  const expected = `{
+   host: hexlet.io
+ - timeout: 50
+ - proxy: 123.234.53.22
+ + timeout: 20
+ + verbose: true
+}`;
+
+
+  const str = toString(result);
+  expect(str).toEqual(expected);
 });
