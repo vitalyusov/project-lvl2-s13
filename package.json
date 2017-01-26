@@ -17,6 +17,12 @@
     "prepublish": "npm run build",
     "test": "jest"
   },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/__fixtures__/"
+    ]
+  },
   "dependencies": {
     "commander": "*",
     "js-yaml": "*",
