@@ -1,3 +1,6 @@
+import fs from 'fs';
+import jsonparse from './jsonparse';
+
 const kvToStr = obj => Object.keys(obj).map(key => `${key}: ${obj[key]}`).join('');
 
 export const toStr = (diff) => {
@@ -9,7 +12,13 @@ export const toStr = (diff) => {
 };
 
 
-export const differ = (beforeObj, afterObj) => {
+export const differ = (beforePath, afterPath) => {
+  const beforeData = fs.readFileSync(beforePath, 'utf-8');
+  const afterData = fs.readFileSync(afterPath, 'utf-8');
+
+  const beforeObj = jsonparse(beforeData);
+  const afterObj = jsonparse(afterData);
+
   // check source to dest keys
   const resForward = Object.keys(beforeObj).reduce((prev, current) => {
     const source = {};

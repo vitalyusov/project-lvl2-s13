@@ -1,4 +1,3 @@
-import fs from 'fs';
 import differ from '../src/index';
 
 const expectedStr = `{
@@ -10,8 +9,8 @@ const expectedStr = `{
 }`;
 
 it('should return correct diff of json files', () => {
-  const beforeData = fs.readFileSync(`${__dirname}/__fixtures__/file1.json`, 'utf-8');
-  const afterData = fs.readFileSync(`${__dirname}/__fixtures__/file2.json`, 'utf-8');
-  const str = differ.compare(beforeData, afterData);
+  const beforePath = '__tests__/__fixtures__/file1.json';
+  const afterPath = '__tests__/__fixtures__/file2.json';
+  const str = differ.compare(beforePath, afterPath);
   expect(str).toEqual(expectedStr);
 });
