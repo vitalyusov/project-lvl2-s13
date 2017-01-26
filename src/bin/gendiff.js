@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
 // @flow
-import program from 'commander';
 import fs from 'fs';
-import parse from '../jsonparse';
-import { diff, toString } from '../diff';
+import program from 'commander';
+import differ from '../index';
+
 
 program
   .version('0.3.0')
@@ -14,10 +14,6 @@ program
   .action((first, second) => {
     const beforeFile = fs.readFileSync(first, 'utf-8');
     const afterFile = fs.readFileSync(second, 'utf-8');
-
-    const beforeObj = parse(beforeFile);
-    const afterObj = parse(afterFile);
-    const d = diff(beforeObj, afterObj);
-    console.log(toString(d));
+    console.log(differ.compare(beforeFile, afterFile));
   })
   .parse(process.argv);
