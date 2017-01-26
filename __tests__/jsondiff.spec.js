@@ -7,15 +7,18 @@ it('should throw exception when files not exist', () => {
 it('should load two json files and return difference', () => {
   const differ = diff(`${__dirname}/file1.json`, `${__dirname}/file2.json`);
 
-  const result = differ();
+  const result = differ.diff();
+
 
   const expected = [
-    { result: '=', source: { host: 'hexlet.io' } },
-    { result: '+', source: { timeout: 20 } },
-    { result: '-', source: { timeout: 50 } },
-    { result: '-', source: { proxy: '123.234.53.22' } },
-    { result: '+', source: { verbose: true } },
+    { sign: '=', source: { host: 'hexlet.io' } },
+    { sign: '-', source: { timeout: 50 } },
+    { sign: '-', source: { proxy: '123.234.53.22' } },
+    { sign: '+', source: { timeout: 20 } },
+    { sign: '+', source: { verbose: true } },
   ];
-
-  expect(result).toEqual(expected);
+  //console.log(result);
+  console.log(expected);
+  differ.toString(result);
+  expect(expected).toEqual(result);
 });
