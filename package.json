@@ -5,6 +5,7 @@
   "bin": {
     "hexdiff": "dist/bin/gendiff.js"
   },
+  "main": "dist/gendiff.js",
   "author": "Vitaly Usov",
   "license": "MIT",
   "scripts": {
@@ -18,7 +19,8 @@
   },
   "dependencies": {
     "commander": "*",
-    "js-yaml": "*"
+    "js-yaml": "*",
+    "ini": "*"
   },
   "devDependencies": {
     "babel-cli": "*",

@@ -1,6 +1,6 @@
 const kvToStr = obj => Object.keys(obj).map(key => `${key}: ${obj[key]}`).join('');
 
-export const toString = (diff) => {
+export const toStr = (diff) => {
   const str = diff
     .map(item => ` ${item.sign} ${kvToStr(item.source)}`)
     .join('\n');
@@ -9,7 +9,7 @@ export const toString = (diff) => {
 };
 
 
-export const diff = (beforeObj, afterObj) => {
+export const differ = (beforeObj, afterObj) => {
   // check source to dest keys
   const resForward = Object.keys(beforeObj).reduce((prev, current) => {
     const source = {};
