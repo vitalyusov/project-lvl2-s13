@@ -16,11 +16,13 @@ export const toStr = (diff) => {
 export const differ = (beforePath, afterPath) => {
   const beforeExt = path.extname(beforePath);
   const afterExt = path.extname(afterPath);
+
   const beforeData = fs.readFileSync(beforePath, 'utf-8');
   const afterData = fs.readFileSync(afterPath, 'utf-8');
 
   const beforeObj = selectParser(beforeExt)(beforeData);
   const afterObj = selectParser(afterExt)(afterData);
+
   const keyMix = _.union(Object.keys(beforeObj), Object.keys(afterObj));
   return keyMix.reduce((accum, key) => {
     const keepDiff = { sign: ' ', source: { [key]: beforeObj[key] } };
