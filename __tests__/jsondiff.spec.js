@@ -2,9 +2,9 @@ import differ from '../src/index';
 
 const expectedStr = `{
    host: hexlet.io
+ + timeout: 20
  - timeout: 50
  - proxy: 123.234.53.22
- + timeout: 20
  + verbose: true
 }`;
 

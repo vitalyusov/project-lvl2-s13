@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import _ from 'lodash';
 import selectParser from './parsers';
 
 const kvToStr = obj => Object.keys(obj).map(key => `${key}: ${obj[key]}`).join('');
@@ -12,7 +13,6 @@ export const toStr = (diff) => {
   return `{\n${str}\n}`;
 };
 
-
 export const differ = (beforePath, afterPath) => {
   const beforeExt = path.extname(beforePath);
   const afterExt = path.extname(afterPath);
@@ -21,33 +21,21 @@ export const differ = (beforePath, afterPath) => {
 
   const beforeObj = selectParser(beforeExt)(beforeData);
   const afterObj = selectParser(afterExt)(afterData);
+  const keyMix = _.union(Object.keys(beforeObj), Object.keys(afterObj));
+  return keyMix.reduce((accum, key) => {
+    const keepDiff = { sign: ' ', source: { [key]: beforeObj[key] } };
+    const addDiff = { sign: '+', source: { [key]: afterObj[key] } };
+    const removeDiff = { sign: '-', source: { [key]: beforeObj[key] } };
 
-  // check source to dest keys
-  const resForward = Object.keys(beforeObj).reduce((prev, current) => {
-    const source = {};
-    source[current] = beforeObj[current];
-    let sign;
-    if (beforeObj[current] === afterObj[current]) {
-      sign = ' ';
+    if (beforeObj[key] === afterObj[key]) {
+      return [...accum, keepDiff];
     }
-
-    if (!afterObj[current] || beforeObj[current] !== afterObj[current]) {
-      sign = '-';
+    if (beforeObj[key] && afterObj[key] && beforeObj[key] !== afterObj[key]) {
+      return [...accum, addDiff, removeDiff];
     }
-    return [...prev, { sign, source }];
+    if (!afterObj[key]) {
+      return [...accum, removeDiff];
+    }
+    return [...accum, addDiff];
   }, []);
-
-  // and check dest to source keys
-  const resBackward = Object.keys(afterObj).reduce((prev, current) => {
-    const source = {};
-    source[current] = afterObj[current];
-    let sign;
-    if (!beforeObj[current] || beforeObj[current] !== afterObj[current]) {
-      sign = '+';
-      return [...prev, { sign, source }];
-    }
-    return prev;
-  }, []);
-
-  return [...resForward, ...resBackward];
 };
