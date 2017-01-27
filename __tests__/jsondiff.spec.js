@@ -21,3 +21,10 @@ it('should return correct diff of yaml files', () => {
   const str = differ.compare(beforePath, afterPath);
   expect(str).toEqual(expectedStr);
 });
+
+it('should return correct diff of ini files', () => {
+  const beforePath = '__tests__/__fixtures__/conf1.ini';
+  const afterPath = '__tests__/__fixtures__/conf2.ini';
+  const str = differ.compare(beforePath, afterPath);
+  expect(str).toEqual(expectedStr);
+});
