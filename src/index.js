@@ -1,5 +1,6 @@
-import { differ, toStr } from './differ';
+import differ from './differ';
+import toString from './treeprinter';
 
-const compare = (before, after) => toStr(differ(before, after));
+const compare = (before, after) => toString(differ(before, after));
 
 export default ({ compare });

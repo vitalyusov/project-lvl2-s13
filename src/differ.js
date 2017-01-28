@@ -3,17 +3,35 @@ import path from 'path';
 import _ from 'lodash';
 import selectParser from './parsers/index';
 
-const kvToStr = obj => Object.keys(obj).map(key => `${key}: ${obj[key]}`).join('');
+const getDiff = (beforeObj, afterObj) => {
+  const keyMix = _.union(Object.keys(beforeObj), Object.keys(afterObj));
+  const diffs = keyMix.map((key) => {
+    const keepDiff = { sign: ' ', key, data: beforeObj[key] };
+    const addDiff = { sign: '+', key, data: afterObj[key] };
+    const removeDiff = { sign: '-', key, data: beforeObj[key] };
 
-export const toStr = (diff) => {
-  const str = diff
-    .map(item => ` ${item.sign} ${kvToStr(item.source)}`)
-    .join('\n');
+    if (beforeObj[key] === afterObj[key]) {
+      return keepDiff;
+    }
+    if (beforeObj[key] && afterObj[key] && _.isPlainObject(beforeObj[key])
+      && _.isPlainObject(afterObj[key])) {
+      const deep = getDiff(beforeObj[key], afterObj[key]);
+      return { sign: ' ', key, data: deep };
+    }
+    if (beforeObj[key] && afterObj[key] && beforeObj[key] !== afterObj[key]) {
+      return [addDiff, removeDiff];
+    }
+    if (!afterObj[key]) {
+      return removeDiff;
+    }
 
-  return `{\n${str}\n}`;
+    return addDiff;
+  });
+
+  return _.flatten(diffs);
 };
 
-export const differ = (beforePath, afterPath) => {
+export default (beforePath, afterPath) => {
   const beforeExt = path.extname(beforePath);
   const afterExt = path.extname(afterPath);
 
@@ -23,25 +41,5 @@ export const differ = (beforePath, afterPath) => {
   const beforeObj = selectParser(beforeExt)(beforeData);
   const afterObj = selectParser(afterExt)(afterData);
 
-  const keyMix = _.union(Object.keys(beforeObj), Object.keys(afterObj));
-  const diffs = keyMix.map((key) => {
-    const keepDiff = { sign: ' ', source: { [key]: beforeObj[key] } };
-    const addDiff = { sign: '+', source: { [key]: afterObj[key] } };
-    const removeDiff = { sign: '-', source: { [key]: beforeObj[key] } };
-
-    if (beforeObj[key] === afterObj[key]) {
-      return keepDiff;
-    }
-
-    if (beforeObj[key] && afterObj[key] && beforeObj[key] !== afterObj[key]) {
-      return [addDiff, removeDiff];
-    }
-
-    if (!afterObj[key]) {
-      return removeDiff;
-    }
-    return addDiff;
-  });
-
-  return _.flatten(diffs);
+  return getDiff(beforeObj, afterObj);
 };

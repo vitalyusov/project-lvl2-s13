@@ -1,12 +1,13 @@
 import differ from '../src/index';
 
 const expectedStr = `{
-   host: hexlet.io
- + timeout: 20
- - timeout: 50
- - proxy: 123.234.53.22
- + verbose: true
+    host: hexlet.io
+  + timeout: 20
+  - timeout: 50
+  - proxy: 123.234.53.22
+  + verbose: true
 }`;
+
 
 it('should return correct diff of json files', () => {
   const beforePath = '__tests__/__fixtures__/file1.json';
@@ -14,6 +15,7 @@ it('should return correct diff of json files', () => {
   const str = differ.compare(beforePath, afterPath);
   expect(str).toEqual(expectedStr);
 });
+
 
 it('should return correct diff of yaml files', () => {
   const beforePath = '__tests__/__fixtures__/yaml1.yml';
