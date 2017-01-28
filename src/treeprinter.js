@@ -8,7 +8,7 @@ const makeBrakets = (str, level) => {
   return `{\n${str}\n${closeBracket}`;
 };
 
-const printObject = (obj, level) => {
+const printPlainObject = (obj, level) => {
   const body = Object.keys(obj).map(key => `${indent(' ', level * SPACESIZE)}${key}: ${obj[key]}`).join('\n');
   return makeBrakets(body, level - 1);
 };
@@ -24,7 +24,7 @@ const printTreeDiff = (diff, level = 1) => {
         return `${sign} ${key}: ${deepBody}`;
       }
       if (_.isPlainObject(item.data)) {
-        return `${sign} ${key}: ${printObject(item.data, level + 1)}`;
+        return `${sign} ${key}: ${printPlainObject(item.data, level + 1)}`;
       }
 
       return `${sign} ${key}: ${item.data}`;
