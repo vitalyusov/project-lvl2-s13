@@ -24,20 +24,24 @@ export const differ = (beforePath, afterPath) => {
   const afterObj = selectParser(afterExt)(afterData);
 
   const keyMix = _.union(Object.keys(beforeObj), Object.keys(afterObj));
-  return keyMix.reduce((accum, key) => {
+  const diffs = keyMix.map((key) => {
     const keepDiff = { sign: ' ', source: { [key]: beforeObj[key] } };
     const addDiff = { sign: '+', source: { [key]: afterObj[key] } };
     const removeDiff = { sign: '-', source: { [key]: beforeObj[key] } };
 
     if (beforeObj[key] === afterObj[key]) {
-      return [...accum, keepDiff];
+      return keepDiff;
     }
+
     if (beforeObj[key] && afterObj[key] && beforeObj[key] !== afterObj[key]) {
-      return [...accum, addDiff, removeDiff];
+      return [addDiff, removeDiff];
     }
+
     if (!afterObj[key]) {
-      return [...accum, removeDiff];
+      return removeDiff;
     }
-    return [...accum, addDiff];
-  }, []);
+    return addDiff;
+  });
+
+  return _.flatten(diffs);
 };
