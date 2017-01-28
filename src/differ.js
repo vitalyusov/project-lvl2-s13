@@ -3,32 +3,37 @@ import path from 'path';
 import _ from 'lodash';
 import selectParser from './parsers/index';
 
+const getValueType = (value) => {
+  if (_.isPlainObject(value)) {
+    return 'object';
+  }
+  return 'primitive';
+};
+
 const getDiff = (beforeObj, afterObj) => {
   const keyMix = _.union(Object.keys(beforeObj), Object.keys(afterObj));
   const diffs = keyMix.map((key) => {
-    const keepDiff = { sign: ' ', key, data: beforeObj[key] };
-    const addDiff = { sign: '+', key, data: afterObj[key] };
-    const removeDiff = { sign: '-', key, data: beforeObj[key] };
+    const before = beforeObj[key];
+    const after = afterObj[key];
 
-    if (beforeObj[key] === afterObj[key]) {
-      return keepDiff;
+    if (before === after) {
+      return { action: 'keep', key, before, after };
     }
-    if (beforeObj[key] && afterObj[key] && _.isPlainObject(beforeObj[key])
-      && _.isPlainObject(afterObj[key])) {
-      const deep = getDiff(beforeObj[key], afterObj[key]);
-      return { sign: ' ', key, data: deep };
+    if (before && after && getValueType(before) === 'object' && getValueType(after) === 'object') {
+      const deep = getDiff(before, after);
+      return { action: 'keepdeep', key, before, after, deep };
     }
     if (beforeObj[key] && afterObj[key] && beforeObj[key] !== afterObj[key]) {
-      return [addDiff, removeDiff];
-    }
-    if (!afterObj[key]) {
-      return removeDiff;
+      return { action: 'update', key, before, after, type: getValueType(before) };
     }
 
-    return addDiff;
+    if (!after) {
+      return { action: 'remove', key, before, after, type: getValueType(before) };
+    }
+
+    return { action: 'add', key, before, after, type: getValueType(after) };
   });
-
-  return _.flatten(diffs);
+  return diffs;
 };
 
 export default (beforePath, afterPath) => {
