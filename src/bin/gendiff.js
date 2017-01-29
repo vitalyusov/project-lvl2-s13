@@ -10,5 +10,5 @@ program
   .description('Compares two configuration files and shows a difference.')
   .option('-f, --format [type]', 'Output format')
   .arguments('<first_config> <second_config>')
-  .action((first, second) => console.log(differ.compare(first, second)))
+  .action((first, second, options) => console.log(differ.compare(first, second, options.format)))
   .parse(process.argv);
