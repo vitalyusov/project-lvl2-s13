@@ -1,6 +1,5 @@
 const getJsonDiff = (diff) => {
-  const json = diff.map((item) => {
-    const { action, key, before, after, deep } = item;
+  const json = diff.map(({ action, key, before, after, deep }) => {
     if (deep) {
       return { action, key, deep: getJsonDiff(deep) };
     }
