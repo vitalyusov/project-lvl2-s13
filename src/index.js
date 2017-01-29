@@ -1,5 +1,5 @@
 import differ from './differ';
-import toString from './printers/treeprinter';
+import getPrinter from './printers/index';
 
-const compare = (before, after) => toString(differ(before, after));
+const compare = (before, after, format = 'tree') => getPrinter(format)(differ(before, after));
 export default ({ compare });
